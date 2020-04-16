@@ -11,6 +11,7 @@ import com.cuiwz.pojo.TradeGoodsNumberLog;
 import com.cuiwz.service.IGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -37,6 +38,7 @@ public class GoodsServiceImpl implements IGoodsService {
     }
 
     @Override
+    @Transactional
     public Result reduceGoodsNum(TradeGoodsNumberLog goodsNumberLog) {
         if (goodsNumberLog == null ||
                 goodsNumberLog.getGoodsNumber() == null ||

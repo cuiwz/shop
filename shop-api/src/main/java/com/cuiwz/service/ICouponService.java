@@ -1,5 +1,6 @@
 package com.cuiwz.service;
 
+import com.cuiwz.entity.Result;
 import com.cuiwz.pojo.TradeCoupon;
 
 /**
@@ -14,5 +15,12 @@ public interface ICouponService {
      * @return
      */
     TradeCoupon findOne(Long couponId);
+
+    /**
+     * 更新优惠券状态
+     * @param coupon
+     * @return
+     */
+    Result updateCouponStatus(TradeCoupon coupon);
 
 }

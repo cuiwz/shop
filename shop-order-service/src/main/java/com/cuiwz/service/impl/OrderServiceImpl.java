@@ -15,6 +15,7 @@ import com.cuiwz.utils.IDWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -44,6 +45,7 @@ public class OrderServiceImpl implements IOrderService {
     private IDWorker idWorker;
 
     @Override
+    @Transactional
     public Result confirmOrder(TradeOrder order) {
         // 1.校验订单
         checkOrder(order);
@@ -53,7 +55,7 @@ public class OrderServiceImpl implements IOrderService {
             // 3.扣减库存
             reduceGoodsNum(order);
             // 4.扣减优惠券
-
+            updateCouponStatus(order);
             // 5.使用余额
 
             // 6.确认订单
@@ -202,6 +204,26 @@ public class OrderServiceImpl implements IOrderService {
             CastException.cast(ShopCode.SHOP_REDUCE_GOODS_NUM_FAIL);
         }
         log.info("订单: " + order.getOrderId() + "扣减库存成功");
+    }
+
+    /**
+     * 使用优惠券
+     * @param order
+     */
+    private void updateCouponStatus(TradeOrder order) {
+        if (order.getCouponId() != null) {
+            TradeCoupon coupon = couponService.findOne(order.getCouponId());
+            coupon.setOrderId(order.getOrderId());
+            coupon.setIsUsed(ShopCode.SHOP_COUPON_ISUSED.getCode());
+            coupon.setUsedTime(new Date());
+
+            // 更新优惠券状态
+            Result result = couponService.updateCouponStatus(coupon);
+            if (result.getSuccess().equals(ShopCode.SHOP_FAIL.getSuccess())) {
+                CastException.cast(ShopCode.SHOP_COUPON_USE_FAIL);
+            }
+            log.info("订单:"+order.getOrderId()+",使用优惠券");
+        }
     }
 
 }
