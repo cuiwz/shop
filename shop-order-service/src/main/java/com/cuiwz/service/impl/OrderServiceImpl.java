@@ -6,10 +6,7 @@ import com.cuiwz.costant.ShopCode;
 import com.cuiwz.entity.Result;
 import com.cuiwz.exception.CastException;
 import com.cuiwz.mapper.TradeOrderMapper;
-import com.cuiwz.pojo.TradeCoupon;
-import com.cuiwz.pojo.TradeGoods;
-import com.cuiwz.pojo.TradeOrder;
-import com.cuiwz.pojo.TradeUser;
+import com.cuiwz.pojo.*;
 import com.cuiwz.service.ICouponService;
 import com.cuiwz.service.IGoodsService;
 import com.cuiwz.service.IOrderService;
@@ -51,10 +48,10 @@ public class OrderServiceImpl implements IOrderService {
         // 1.校验订单
         checkOrder(order);
         // 2.生成预订单
-
+        savePreOrder(order);
         try {
             // 3.扣减库存
-
+            reduceGoodsNum(order);
             // 4.扣减优惠券
 
             // 5.使用余额
@@ -106,7 +103,6 @@ public class OrderServiceImpl implements IOrderService {
 
     /**
      * 生成预订单
-     *
      * @param order
      * @return
      */
@@ -190,7 +186,22 @@ public class OrderServiceImpl implements IOrderService {
         } else {
             return new BigDecimal(10);
         }
+    }
 
+    /**
+     * 扣减库存
+     * @param order
+     */
+    private void reduceGoodsNum(TradeOrder order) {
+        TradeGoodsNumberLog goodsNumberLog = new TradeGoodsNumberLog();
+        goodsNumberLog.setOrderId(order.getOrderId());
+        goodsNumberLog.setGoodsId(order.getGoodsId());
+        goodsNumberLog.setGoodsNumber(order.getGoodsNumber());
+        Result result = goodsService.reduceGoodsNum(goodsNumberLog);
+        if (result.getSuccess().equals(ShopCode.SHOP_FAIL.getSuccess())) {
+            CastException.cast(ShopCode.SHOP_REDUCE_GOODS_NUM_FAIL);
+        }
+        log.info("订单: " + order.getOrderId() + "扣减库存成功");
     }
 
 }

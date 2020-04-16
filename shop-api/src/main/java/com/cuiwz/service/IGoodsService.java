@@ -1,6 +1,8 @@
 package com.cuiwz.service;
 
+import com.cuiwz.entity.Result;
 import com.cuiwz.pojo.TradeGoods;
+import com.cuiwz.pojo.TradeGoodsNumberLog;
 
 /**
  * @Author cuiwz
@@ -14,5 +16,12 @@ public interface IGoodsService {
      * @return
      */
     TradeGoods findOne(Long goodsId);
+
+    /**
+     * 扣减库存
+     * @param goodsNumberLog
+     * @return
+     */
+    Result reduceGoodsNum(TradeGoodsNumberLog goodsNumberLog);
 
 }
