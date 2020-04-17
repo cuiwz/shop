@@ -57,7 +57,7 @@ public class OrderServiceImpl implements IOrderService {
             // 4.扣减优惠券
             updateCouponStatus(order);
             // 5.使用余额
-
+            reduceMoneyPaid(order);
             // 6.确认订单
 
             // 7.返回成功状态
@@ -72,7 +72,6 @@ public class OrderServiceImpl implements IOrderService {
 
     /**
      * 校验订单
-     *
      * @param order
      */
     private void checkOrder(TradeOrder order) {
@@ -222,7 +221,26 @@ public class OrderServiceImpl implements IOrderService {
             if (result.getSuccess().equals(ShopCode.SHOP_FAIL.getSuccess())) {
                 CastException.cast(ShopCode.SHOP_COUPON_USE_FAIL);
             }
-            log.info("订单:"+order.getOrderId()+",使用优惠券");
+            log.info("订单: " + order.getOrderId() + ", 使用优惠券");
+        }
+    }
+
+    /**
+     * 扣减余额
+     * @param order
+     */
+    private void reduceMoneyPaid(TradeOrder order) {
+        if (order.getMoneyPaid()!=null && order.getMoneyPaid().compareTo(BigDecimal.ZERO)==1) {
+            TradeUserMoneyLog userMoneyLog = new TradeUserMoneyLog();
+            userMoneyLog.setOrderId(order.getOrderId());
+            userMoneyLog.setUserId(order.getUserId());
+            userMoneyLog.setUseMoney(order.getMoneyPaid());
+            userMoneyLog.setMoneyLogType(ShopCode.SHOP_USER_MONEY_PAID.getCode());
+            Result result = userService.updateMoneyPaid(userMoneyLog);
+            if (result.getSuccess().equals(ShopCode.SHOP_FAIL.getSuccess())) {
+                CastException.cast(ShopCode.SHOP_USER_MONEY_REDUCE_FAIL);
+            }
+            log.info("订单: " + order.getOrderId() + ", 扣减余额成功");
         }
     }
 

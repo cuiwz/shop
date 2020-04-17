@@ -1,6 +1,8 @@
 package com.cuiwz.service;
 
+import com.cuiwz.entity.Result;
 import com.cuiwz.pojo.TradeUser;
+import com.cuiwz.pojo.TradeUserMoneyLog;
 
 /**
  * @Author cuiwz
@@ -14,5 +16,12 @@ public interface IUserService {
      * @return
      */
     TradeUser findOne(Long userId);
+
+    /**
+     * 更新用户余额
+     * @param userMoneyLog
+     * @return
+     */
+    Result updateMoneyPaid(TradeUserMoneyLog userMoneyLog);
 
 }
