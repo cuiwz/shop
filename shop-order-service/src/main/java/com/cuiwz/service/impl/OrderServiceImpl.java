@@ -59,9 +59,9 @@ public class OrderServiceImpl implements IOrderService {
             // 5.使用余额
             reduceMoneyPaid(order);
             // 6.确认订单
-
+            updateOrderStatus(order);
             // 7.返回成功状态
-
+            return new Result(ShopCode.SHOP_SUCCESS.getSuccess(), ShopCode.SHOP_SUCCESS.getMessage());
         } catch (Exception e) {
             // 1.确认订单失败,发送消息
 
@@ -242,6 +242,21 @@ public class OrderServiceImpl implements IOrderService {
             }
             log.info("订单: " + order.getOrderId() + ", 扣减余额成功");
         }
+    }
+
+    /**
+     * 确认订单
+     * @param order
+     */
+    private void updateOrderStatus(TradeOrder order) {
+        order.setOrderStatus(ShopCode.SHOP_ORDER_CONFIRM.getCode());
+        order.setPayStatus(ShopCode.SHOP_ORDER_PAY_STATUS_NO_PAY.getCode());
+        order.setConfirmTime(new Date());
+        int r = orderMapper.updateByPrimaryKey(order);
+        if (r <= 0) {
+            CastException.cast(ShopCode.SHOP_ORDER_CONFIRM_FAIL);
+        }
+        log.info("订单: " + order.getOrderId() + "确认订单成功");
     }
 
 }
