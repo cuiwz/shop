@@ -1,0 +1,39 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: dubbo-order-provider
+  datasource:
+    name: trade
+    url: jdbc:mysql://localhost:3306/trade?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: 123456
+  dubbo:
+    application:            #应用配置，用于配置当前应用信息，不管该应用是提供者还是消费者。
+      id: dubbo-order-provider
+      name: dubbo-order-provider
+    registry:                 #注册中心配置，用于配置连接注册中心相关信息。
+      address: zookeeper://123.56.158.9:2181;zookeeper://123.56.158.9:2182;zookeeper://123.56.158.9:2183
+    protocol:     #协议配置，用于配置提供服务的协议信息，协议由提供方指定，消费方被动接受。
+      name: dubbo
+      port: 20882
+#    scan: com.dubboProvide.dubboProvide.service  #服务暴露与发现消费所在的package
+# mybatis配置
+mybatis:
+  type-aliases-package: com.cuiwz.pojo
+  mapper-locations: classpath:/mapper/*.xml
+#RocketMQ配置
+rocketmq:
+  name-server: 123.56.158.9:9876;123.56.239.229:9876
+  producer:
+    group: orderProducerGroup
+    send-message-timeout: 50000
+
+mq:
+  order:
+    consumer:
+      group:
+        name: order_orderTopic_cancel_group
+    topic: orderTopic
+    tag:
+      cancel: order_cancel

@@ -2,10 +2,12 @@ package com.cuiwz.mapper;
 
 import com.cuiwz.pojo.TradeOrder;
 import com.cuiwz.pojo.TradeOrderExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Mapper
 public interface TradeOrderMapper {
     int countByExample(TradeOrderExample example);
 

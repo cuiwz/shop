@@ -3,10 +3,12 @@ package com.cuiwz.mapper;
 import com.cuiwz.pojo.TradeGoodsNumberLog;
 import com.cuiwz.pojo.TradeGoodsNumberLogExample;
 import com.cuiwz.pojo.TradeGoodsNumberLogKey;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Mapper
 public interface TradeGoodsNumberLogMapper {
     int countByExample(TradeGoodsNumberLogExample example);
 

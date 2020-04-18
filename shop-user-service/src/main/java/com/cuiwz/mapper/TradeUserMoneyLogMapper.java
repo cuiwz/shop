@@ -3,10 +3,12 @@ package com.cuiwz.mapper;
 import com.cuiwz.pojo.TradeUserMoneyLog;
 import com.cuiwz.pojo.TradeUserMoneyLogExample;
 import com.cuiwz.pojo.TradeUserMoneyLogKey;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Mapper
 public interface TradeUserMoneyLogMapper {
     int countByExample(TradeUserMoneyLogExample example);
 

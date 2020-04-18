@@ -2,10 +2,12 @@ package com.cuiwz.mapper;
 
 import com.cuiwz.pojo.TradeUser;
 import com.cuiwz.pojo.TradeUserExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Mapper
 public interface TradeUserMapper {
     int countByExample(TradeUserExample example);
 
